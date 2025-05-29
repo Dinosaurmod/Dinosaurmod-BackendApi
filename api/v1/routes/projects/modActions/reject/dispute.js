@@ -1,0 +1,37 @@
+module.exports = (app, utils) => {
+    app.post('/api/v1/projects/dispute', utils.cors(), async (req, res) => {
+        const packet = req.body;
+
+        const username = (String(packet.username)).toLowerCase();
+        const token = packet.token;
+
+        const messageID = packet.messageID;
+        const dispute = packet.dispute;
+
+        if (!username || !token || typeof messageID !== "string" || typeof dispute !== "string") {
+            return utils.error(res, 400, "Missing username, token, messageID, or dispute");
+        }
+
+        if (!await utils.UserManager.loginWithToken(username, token)) {
+            return utils.error(res, 401, "Invalid credentials");
+        }
+
+        const message = await utils.UserManager.getMessage(messageID);
+
+        if (!message) {
+            return utils.error(res, 404, "MessageNotFound");
+        }
+
+        if (!message.disputable) {
+            return utils.error(res, 400, "NotDisputable");
+        }
+
+        await utils.UserManager.dispute(messageID, dispute);
+        
+        utils.logs.disputeLog(username, messageID, message.message, dispute, message.projectID);
+
+        res.status(200);
+        res.header("Content-Type", 'application/json');
+        res.send({ success: true });
+    });
+}

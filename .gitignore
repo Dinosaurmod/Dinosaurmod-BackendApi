@@ -1,0 +1,14 @@
+# Tokens
+.env
+
+# Node
+node_modules
+
+# macOS
+.DS_Store
+
+# Windows
+System Volume Information
+
+# Multifile
+tmp
