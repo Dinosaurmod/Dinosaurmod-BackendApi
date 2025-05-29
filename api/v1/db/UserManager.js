@@ -4112,8 +4112,8 @@ class UserManager {
                 Messages: [
                     {
                         "From": {
-                        "Email": "no-reply@penguinmod.com",
-                        "Name": "Penguinmod"
+                        "Email": "no-reply@dinosaurmod.com",
+                        "Name": "Dinosaurmod"
                         },
                         "To": [
                         {
