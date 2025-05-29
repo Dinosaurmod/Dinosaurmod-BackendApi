@@ -1,0 +1,17 @@
+module.exports = (app, utils) => {
+    app.get('/api/v1/users/getid', async function (req, res) {
+        const packet = req.query;
+
+        const username = (String(packet.username)).toLowerCase();
+
+        if (!username) {
+            return utils.error(res, 400, "Missing username");
+        }
+
+        const id = await utils.UserManager.getIDByUsername(username);
+
+        res.status(200);
+        res.header('Content-type', "application/json");
+        res.send({ id: id });
+    });
+}
